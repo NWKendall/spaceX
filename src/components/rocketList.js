@@ -1,30 +1,21 @@
-import React from "react";
-import { gql } from "apollo-boost";
+import React, { useState } from "react";
 import { graphql } from "react-apollo";
+import { getShipsQuery } from "../queries/queries.js";
+import RocketDetails from './rocketDetails.js';
 
-const getShipsQuery = gql`
-  {
-    rockets(limit: 10) {
-      id
-      boosters
-      company
-      diameter {
-        meters
-      }
-      name
-    }
-  }
-`;
 
 const RocketList = ({ data }) => {
-  console.log(data)
+  const [selected, setSelected] = useState(null)
   return (
     <div>
       {data.loading ? (
         <div>loading...</div>
       ) : (
-        data.rockets.map((rocket) => <p key={rocket.id}>{rocket.name}</p>)
+        data.rockets.map((rocket) => <p onClick={(e) => setSelected(rocket)} key={rocket.id}>{rocket.name}</p>)
       )}
+      <br></br>
+      <RocketDetails rocketID={selected} /> 
+
     </div>
   );
 };
